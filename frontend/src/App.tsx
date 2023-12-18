@@ -1,14 +1,13 @@
 import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Pay from "./Pay";
-import Success from "./Success";
+
+import Home from "./Routes/Home";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/pay" element={<Pay />} />
-        <Route path="/success" element={<Success />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
