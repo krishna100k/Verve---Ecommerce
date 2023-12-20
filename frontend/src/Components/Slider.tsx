@@ -31,7 +31,7 @@ const Arrow = styled.div<ArrowProps>`
   left: ${(props) => props.direction === "left" && "10px"};
   right: ${(props) => props.direction === "right" && "10px"};
   opacity: 0.7;
-  background-color: #c9ffee;
+  background-color: #c7c7c7;
   border-radius: 100%;
   width: 3rem;
   aspect-ratio: 1/1;

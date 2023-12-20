@@ -58,6 +58,7 @@ const Input = styled.input`
   width: 90%;
   border: none;
   padding: 0.5rem;
+  background-color: #f5fafd;
 `;
 
 const Logo = styled.h1`

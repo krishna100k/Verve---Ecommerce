@@ -3,6 +3,8 @@ import Announcement from "../Components/Announcement";
 import Slider from "../Components/Slider";
 import Categories from "../Components/Categories";
 import Products from "../Components/Products";
+import NewsLetter from "../Components/NewsLetter";
+import Footer from "../Components/Footer";
 const Home = () => {
   return (
     <div>
@@ -11,6 +13,8 @@ const Home = () => {
       <Slider />
       <Categories />
       <Products />
+      <NewsLetter />
+      <Footer />
     </div>
   );
 };
