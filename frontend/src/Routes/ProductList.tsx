@@ -4,6 +4,7 @@ import Products from "../Components/Products";
 import Announcement from "../Components/Announcement";
 import Footer from "../Components/Footer";
 import NewsLetter from "../Components/NewsLetter";
+import { mobile } from "../responsive";
 
 const Container = styled.div``;
 
@@ -18,7 +19,9 @@ const FilterContainer = styled.div`
   margin: 2.5rem;
 `;
 
-const Filter = styled.p``;
+const Filter = styled.div`
+  ${mobile({flexDirection: "column", justifyContent: "center"})}
+`;
 
 const Select = styled.select`
     padding: .5rem;
@@ -38,7 +41,7 @@ const ProductList = () => {
       <Title>Products</Title>
       <FilterContainer>
         <Filter>
-          Filter Products :{" "}
+          <p>Filter Products</p>
           <Select>
             <Option disabled selected>
               Color
@@ -63,7 +66,7 @@ const ProductList = () => {
           </Select>{" "}
         </Filter>
         <Filter>
-          Sort Products :{" "}
+          <p>Sort Products :</p>
           <Select>
             <Option selected>
               Newest

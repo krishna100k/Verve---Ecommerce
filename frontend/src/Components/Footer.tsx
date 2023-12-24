@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import { Facebook, Instagram, Twitter, Pinterest, Payment } from "@mui/icons-material";
+import { Facebook, Instagram, Twitter, Pinterest } from "@mui/icons-material";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
+import {mobile} from "../responsive"
+
 
 interface socialColor {
   bg: string;
@@ -12,6 +14,8 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  ${mobile({flexDirection: "column", alignItems: "flex-start"})}
+
 `;
 const Left = styled.div`
   display: flex;
@@ -37,6 +41,7 @@ const Right = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 1rem;
+  padding: 2rem;
 `;
 
 //Left

@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { categories } from "../data"
+import {mobile} from "../responsive"
 
 const Container = styled.div`
   width: 100%;
@@ -7,6 +8,7 @@ const Container = styled.div`
   display: flex;
   position: relative;
   padding: 1rem;
+  ${mobile({flexDirection: "column", height: "100%"})}
 `
 
 const Image = styled.img`
@@ -47,6 +49,8 @@ const Boxes = styled.div`
   align-items: center;
   margin: .5rem;
 `
+
+
 
 
 const Categories = () => {

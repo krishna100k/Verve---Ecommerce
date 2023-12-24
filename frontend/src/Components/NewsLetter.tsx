@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import {mobile} from "../responsive"
 
 
 const Container = styled.div`
@@ -16,10 +17,13 @@ const Container = styled.div`
 
 const Title = styled.h1`
     font-size: 6rem;
+    ${mobile({fontSize: "15vw"})}
+
 `
 
 const Description = styled.p`
     font-size: 1.2rem;
+    ${mobile({fontSize: "3vw"})}
 `
 
 const InputContainer = styled.div`

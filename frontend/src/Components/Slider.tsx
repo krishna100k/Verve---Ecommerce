@@ -4,6 +4,8 @@ import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDo
 import { useState } from "react";
 import { sliderItems } from "../data";
 
+import {mobile} from "../responsive"
+
 interface ArrowProps {
   direction?: string;
 }
@@ -58,7 +60,7 @@ const Slide = styled.div<bgProps>`
   justify-content: center;
   align-items: center;
   background-color: ${(props) => props.bg};
-  /* padding-top: 2rem; */
+  ${mobile({gap : ".5rem"})}
 `;
 
 const ImgContainer = styled.div`
@@ -78,13 +80,13 @@ const InfoContainer = styled.div`
 `;
 
 const Image = styled.img`
-  /* height: 30%; */
-  width: 37%;
-  /* aspect-ratio: 1/3; */
+  width: 20rem;
+  ${mobile({width : "16rem"})}
 `;
 
 const Title = styled.h1`
   font-size: 6rem;
+  ${mobile({fontSize: "3rem"})}
 `;
 
 const Para = styled.p`

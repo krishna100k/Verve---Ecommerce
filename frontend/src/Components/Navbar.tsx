@@ -2,6 +2,7 @@ import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
 import Badge from "@mui/material/Badge";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import {mobile} from "../responsive"
 
 const Container = styled.div`
   width: 100%;
@@ -13,6 +14,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  ${mobile({  padding: "10px 25px 0px 10px"})}
 `;
 
 const Left = styled.div`
@@ -27,14 +29,17 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: .5rem;
 `;
 
 const Center = styled.div`
   flex: 1;
 `;
 
-const Language = styled.p``;
+const Language = styled.p`
+  cursor: pointer;
+  ${mobile({display: "none"})}
+`;
 
 const SearchButton = styled.button`
   height: 100%;
@@ -51,6 +56,7 @@ const SearchBar = styled.div`
   align-items: center;
   border: solid 1px lightgray;
   justify-content: space-between;
+  ${mobile({width: "100%"})}
 `;
 
 const Input = styled.input`
@@ -64,6 +70,7 @@ const Input = styled.input`
 const Logo = styled.h1`
   font-weight: bolder;
   text-align: center;
+  ${mobile({fontSize: "1.5rem"})}
 `;
 
 const RightButton = styled.button`
@@ -71,6 +78,7 @@ const RightButton = styled.button`
   border: none;
   font-size: medium;
   cursor: pointer;
+  ${mobile({width: "100%", fontSize: ".9rem"})}
 `;
 
 const Navbar = () => {

@@ -5,6 +5,7 @@ import NewsLetter from "../Components/NewsLetter";
 import Footer from "../Components/Footer";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import {mobile } from "../responsive";
 
 interface bg {
   bg: string;
@@ -15,12 +16,14 @@ const Container = styled.div``;
 const Wrapper = styled.div`
   display: flex;
   color: #000000;
+  ${mobile({flexDirection: "column"})}
 `;
 const Left = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  ${mobile({padding: ".5rem", marginTop: ".5rem"})}
 `;
 
 const Image = styled.img`
@@ -36,10 +39,12 @@ const Right = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 2rem;
+  ${mobile({padding: "1.5rem"})}
 `;
 
 const Title = styled.h1`
     font-size: 4rem;
+    ${mobile({fontSize: "3rem"})}
     `;
 
 const Desc = styled.p`
