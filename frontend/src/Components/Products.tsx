@@ -1,8 +1,33 @@
 import styled from "styled-components";
-import { popularProducts } from "../data";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import axios from "axios";
+import url from "../url";
+import { useState, useEffect } from "react";
+
+interface Product {
+  _id: string;
+  title: string;
+  desc: string;
+  img: string;
+  categories: string[];
+  size: string;
+  color: string;
+  price: number;
+  inStock: boolean;
+  createdAt: string;
+}
+
+interface ProductsProps {
+  category: string | undefined;
+  filters: {
+    color?: string;
+    size?: string;
+  };
+  sort?: string;
+  home?: boolean;
+}
 
 const Modal = styled.div`
   position: absolute;
@@ -18,13 +43,12 @@ const Modal = styled.div`
 
 const Container = styled.div`
   margin-top: 1rem;
+  width: 100%; 
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   gap: 0.8rem;
-
-
 `;
 
 const Boxes = styled.div`
@@ -35,17 +59,17 @@ const Boxes = styled.div`
   align-items: center;
   background-color: #e5ebee;
   position: relative;
-  
-  &:hover ${Modal}{
+
+  &:hover ${Modal} {
     opacity: 1;
   }
 `;
 const Image = styled.img`
-  object-fit: contain;
-  width: 75%;
-  height: 75%;
+  object-fit: cover;
+  object-position: top;
+  width: 100%;
+  height: 100%;
 `;
-
 
 const Icon = styled.div`
   background-color: white;
@@ -63,12 +87,93 @@ const Icon = styled.div`
   }
 `;
 
-const Products = () => {
+const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        if (category == "all") {
+          const response = await axios.get(url + "/product/find");
+          setProducts(response.data);
+        } else {
+          const response = await axios.get(
+            url + `/product/find?category=${category}`
+          );
+          setProducts(response.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchProducts();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, filters]);
+
+  useEffect(() => {
+    setFilteredProducts(
+      products.filter((item) => {
+        if (
+          (!filters?.color ||
+            filters?.color === "Color" ||
+            item.color.toLowerCase().includes(filters.color.toLowerCase())) &&
+          (!filters?.size ||
+            filters?.size === "Size" ||
+            item.size.includes(filters.size))
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
+  }, [products, filters]);
+
+
+  useEffect(() => {
+    if (sort === "Newest") {
+      setFilteredProducts((prevState) => {
+        return [...prevState.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())];
+      });
+    }else if (sort === "Price (asc)"){
+      setFilteredProducts((prevState) => {
+        return [...prevState.sort((a, b) => a.price - b.price)]
+      })
+    }else{
+      setFilteredProducts((prevState) => {
+        return [...prevState.sort((a, b) => b.price - a.price)]
+      })
+    }
+  }, [filters, sort]);
+
+
   return (
     <Container>
-      {popularProducts.map((product) => {
+      
+      {home ? filteredProducts.slice(0,8).map((product: Product) => {
         return (
-          <Boxes key={product.id}>
+          <Boxes key={product._id}>
+            <Image src={product.img} />
+            <Modal>
+              <Icon>
+                <ShoppingCartOutlinedIcon />
+              </Icon>
+              <Icon>
+                <SearchOutlinedIcon />
+              </Icon>
+              <Icon>
+                <FavoriteBorderOutlinedIcon />
+              </Icon>
+            </Modal>
+          </Boxes>
+        );
+      }) 
+      : 
+      filteredProducts.map((product: Product) => {
+        return (
+          <Boxes key={product._id}>
             <Image src={product.img} />
             <Modal>
               <Icon>

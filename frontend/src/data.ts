@@ -10,6 +10,7 @@ interface SliderItem {
     id: number;
     img: string;
     title:string;
+    category: string;
   }
 
   interface products {
@@ -45,17 +46,20 @@ export const sliderItems: SliderItem[] = [
     {
       id: 1,
       img: "https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      title: "SHIRT STYLE!",
+      title: "WOMAN",
+      category: "Woman"
     },
     {
       id: 2,
       img: "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      title: "LOUNGEWEAR LOVE",
+      title: "MEN",
+      category: "Men"
     },
     {
       id: 3,
       img: "https://images.pexels.com/photos/5480696/pexels-photo-5480696.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-      title: "LIGHT JACKETS",
+      title: "ALL",
+      category: "all"
     },
   ];
 
@@ -66,15 +70,15 @@ export const sliderItems: SliderItem[] = [
     },
     {
       id:2,
-      img:"https://freepngimg.com/thumb/suit/2-suit-png-image.png",
+      img:"https://i.ibb.co/CzX9TCW/img.webp",
     },
     {
       id:3,
-      img:"https://www.prada.com/content/dam/pradanux_products/U/UCS/UCS319/1YOTF010O/UCS319_1YOT_F010O_S_182_SLF.png",
+      img:"https://i.ibb.co/bN0f54q/Woman-white.webp",
     },
     {
       id:4,
-      img:"https://freepngimg.com/thumb/sunglasses/64543-editing-sunglass-free-transparent-image-hq.png",
+      img:"https://i.ibb.co/nMpr7KJ/Relaxed-Fit-Jacket-Men-brown.webp",
     },
     {
       id:5,

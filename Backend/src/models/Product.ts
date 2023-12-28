@@ -8,6 +8,7 @@ export interface Iproduct extends Document{
   size: string;
   color: string;
   price: number;
+  inStock: boolean;
 }
 
 const productSchema = new mongoose.Schema<Iproduct>(
@@ -19,6 +20,7 @@ const productSchema = new mongoose.Schema<Iproduct>(
     size: { type: String },
     color: { type: String },
     price: { type: Number, required: true },
+    inStock: {type:  Boolean, default: true}
   },
   { timestamps: true }
 );

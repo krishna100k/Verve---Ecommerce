@@ -5,6 +5,10 @@ import Announcement from "../Components/Announcement";
 import Footer from "../Components/Footer";
 import NewsLetter from "../Components/NewsLetter";
 import { mobile } from "../responsive";
+import { useParams } from "react-router";
+import { useState } from "react";
+
+
 
 const Container = styled.div``;
 
@@ -20,20 +24,36 @@ const FilterContainer = styled.div`
 `;
 
 const Filter = styled.div`
-  ${mobile({flexDirection: "column", justifyContent: "center"})}
+  ${mobile({ flexDirection: "column", justifyContent: "center" })}
 `;
 
 const Select = styled.select`
-    padding: .5rem;
-    border: solid 1px lightgrey;
-    cursor: pointer;
+  padding: 0.5rem;
+  border: solid 1px lightgrey;
+  cursor: pointer;
 `;
 
 const Option = styled.option`
-    cursor: pointer;
+  cursor: pointer;
 `;
 
 const ProductList = () => {
+  const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState("");
+
+  const category = useParams().category;
+
+
+
+
+  const options = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e?.target?.value;
+    setFilters({
+      ...filters,
+      [e?.target?.name]: value,
+    });
+  };
+
   return (
     <Container>
       <Navbar />
@@ -42,21 +62,17 @@ const ProductList = () => {
       <FilterContainer>
         <Filter>
           <p>Filter Products</p>
-          <Select>
-            <Option disabled selected>
-              Color
-            </Option>
+          <Select name="color" defaultValue={"Color"} onChange={options}>
+            <Option>Color</Option>
             <Option>Red</Option>
-            <Option>Black</Option>
+            <Option>Brown</Option>
             <Option>Yellow</Option>
             <Option>Green</Option>
             <Option>White</Option>
             <Option>Black</Option>
           </Select>{" "}
-          <Select>
-            <Option disabled selected>
-              Size
-            </Option>
+          <Select name="size" defaultValue={"Size"} onChange={options}>
+            <Option>Size</Option>
             <Option>S</Option>
             <Option>M</Option>
             <Option>L</Option>
@@ -67,16 +83,20 @@ const ProductList = () => {
         </Filter>
         <Filter>
           <p>Sort Products :</p>
-          <Select>
-            <Option selected>
-              Newest
-            </Option>
+          <Select
+            defaultValue={"Sort"}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setSort(e.target.value)
+            }
+          >
+            <Option disabled>Sort</Option>
+            <Option>Newest</Option>
             <Option>Price (asc)</Option>
             <Option>Price (desc)</Option>
           </Select>{" "}
         </Filter>
       </FilterContainer>
-      <Products />
+      <Products category={category} filters = {filters} sort = {sort} />
       <NewsLetter />
       <Footer />
     </Container>

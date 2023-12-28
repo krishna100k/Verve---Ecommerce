@@ -4,12 +4,16 @@ import Footer from "../Components/Footer";
 import Announcement from "../Components/Announcement";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import {mobile} from "../responsive"
 
 interface Topbutton {
   type?: string;
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+${mobile({width: "125%"})}
+  
+`;
 
 const Wrapper = styled.div`
   padding: 20px;
@@ -42,11 +46,13 @@ const TopText = styled.span`
   text-decoration: underline;
   cursor: pointer;
   margin: 0px 10px;
+  ${mobile({display: "none"})}
 `;
 
 const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
+  ${mobile({flexDirection: "column", gap: "2rem"})}
 `;
 
 const Info = styled.div`
@@ -61,6 +67,7 @@ const Product = styled.div`
 const ProductDetail = styled.div`
   flex: 2;
   display: flex;
+  ${mobile({flexDirection: "column"})}
 `;
 
 const Image = styled.img`

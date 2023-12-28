@@ -12,7 +12,7 @@ const Home = () => {
       <Navbar />
       <Slider />
       <Categories />
-      <Products />
+      <Products home = {true} filters={{}} category="all" />
       <NewsLetter />
       <Footer />
     </div>

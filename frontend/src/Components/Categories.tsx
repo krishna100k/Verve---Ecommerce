@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { categories } from "../data"
 import {mobile} from "../responsive"
+import { NavigateFunction, useNavigate } from "react-router"
 
 const Container = styled.div`
   width: 100%;
@@ -54,15 +55,19 @@ const Boxes = styled.div`
 
 
 const Categories = () => {
+
+  const navigate:NavigateFunction = useNavigate();
+
+
   return (
     <Container>
       {categories.map((item, i) => {
         return(
-          <Boxes>
-          <Image key={i} src={item.img} />
+          <Boxes key={i}>
+          <Image src={item.img} />
           <Info>
             <Title>{item.title}</Title>
-            <Button>SHOP NOW</Button>
+            <Button onClick={() => navigate(`/products/${item.category}`)}>SHOP NOW</Button>
           </Info>
           </Boxes>
         )
