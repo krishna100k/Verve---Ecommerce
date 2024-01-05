@@ -1,5 +1,12 @@
 import styled from "styled-components";
-import {mobile} from "../responsive"
+import { mobile } from "../responsive";
+import { FormEvent, useState } from "react";
+import axios from "axios";
+import url from "../url";
+import { useDispatch } from "react-redux";
+import { loginFailure, loginRequest, loginSuccess } from "../redux/userSlice";
+import { useNavigate } from "react-router";
+import Navbar from "../Components/Navbar";
 
 const Container = styled.div`
   width: 100vw;
@@ -12,8 +19,10 @@ const Container = styled.div`
       center;
   background-size: cover;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 25%;
 `;
 
 const Wrapper = styled.div`
@@ -26,7 +35,7 @@ const Wrapper = styled.div`
   height: 25rem;
   padding: 20px;
   background-color: white;
-  ${mobile({width: "100%", height: "auto"})}
+  ${mobile({ width: "100%", height: "auto" })}
 `;
 
 const Title = styled.h1`
@@ -65,20 +74,73 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
+const Error = styled.p`
+color: #d9b4b4;
+padding-bottom: 10px;
+`
+
 const Login = () => {
+  const [username, setUsername] = useState<string | undefined>("");
+  const [password, setPassword] = useState<string | undefined>("");
+  const [error, setError] = useState<string | undefined>("")
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const fetch = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if(username === ""){
+      setError("username is required!");
+    }else if(password === ""){
+      setError("Password is required!");
+    }
+
+    dispatch(loginRequest());
+
+    const options = {
+      username,
+      password,
+    };
+
+    try {
+      const response = await axios.post(`${url}/auth/login`, options);
+      console.log(response);
+      dispatch(loginSuccess({user: response.data.user}))
+      setError("Login Successful!");
+      localStorage.setItem('token', response.data.token);
+      navigate("/")
+    } catch (err) {
+      console.log(err)
+      dispatch(loginFailure(err.message))
+      setError("Login Failed !")
+    }
+  };
+
   return (
     <Container>
+      <Navbar />
       <Wrapper>
         <Title>SIGN IN</Title>
-        <Form>
-          <Input placeholder="username" />
-          <Input placeholder="password" />
+        <Form onSubmit={fetch}>
+          <Input
+          value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="username"
+          />
+          <Input
+          value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+          />
+          <Error>{error}</Error>
           <Button>LOGIN</Button>
           <Link>FORGOT PASSWORD ?</Link>
-          <Link>CREATE A NEW ACCOUNT !</Link>
+          <Link onClick={() => navigate("/register")}>CREATE A NEW ACCOUNT !</Link>
         </Form>
       </Wrapper>
     </Container>
+
   );
 };
 

@@ -4,15 +4,38 @@ import Footer from "../Components/Footer";
 import Announcement from "../Components/Announcement";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import {mobile} from "../responsive"
+import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
+import StripeCheckout, { Token } from 'react-stripe-checkout';
+import { useState } from "react";
+import axios from "axios"
+import { useEffect } from "react";
+import { State } from "../redux/cartSlice";
 
 interface Topbutton {
   type?: string;
 }
 
+interface Product {
+  _id: string;
+  title: string;
+  desc: string;
+  img: string;
+  categories: string[];
+  size: string;
+  color: string;
+  price: number;
+  inStock: boolean;
+  createdAt: string;
+  quantity?: number;
+}
+
+interface CartState{
+  cart:State;
+}
+
 const Container = styled.div`
-${mobile({width: "125%"})}
-  
+  ${mobile({ width: "125%" })}
 `;
 
 const Wrapper = styled.div`
@@ -46,13 +69,13 @@ const TopText = styled.span`
   text-decoration: underline;
   cursor: pointer;
   margin: 0px 10px;
-  ${mobile({display: "none"})}
+  ${mobile({ display: "none" })}
 `;
 
 const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({flexDirection: "column", gap: "2rem"})}
+  ${mobile({ flexDirection: "column", gap: "2rem" })}
 `;
 
 const Info = styled.div`
@@ -62,12 +85,15 @@ const Info = styled.div`
 const Product = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: solid 1px #eee;
 `;
 
 const ProductDetail = styled.div`
   flex: 2;
   display: flex;
-  ${mobile({flexDirection: "column"})}
+  ${mobile({ flexDirection: "column" })}
 `;
 
 const Image = styled.img`
@@ -118,11 +144,11 @@ const ProductPrice = styled.div`
   font-weight: 200;
 `;
 
-const Hr = styled.hr`
-  background-color: #eee;
-  border: none;
-  height: 1px;
-`;
+// const Hr = styled.hr`
+//   background-color: #eee;
+//   border: none;
+//   height: 1px;
+// `;
 
 const Summary = styled.div`
   flex: 1;
@@ -157,7 +183,41 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Cart = () => {
+//Styling Ends Here
+
+const Cart: React.FC = () => {
+  const cart = useSelector((state: CartState) => state.cart);
+
+  console.log(cart)
+
+  const key =
+    "pk_test_51OD09rSCBYeXMCGHYdNUXlpe78oHBYfUiXDJgX50yybLQEyrBN9ZPsgritU2IF2mBZ7PgmKPRyh1nYBngs6IYbyE00szMMyd00";
+  const [stripeToken, setStripeToken] = useState<null | Token>(null);
+
+  const onToken = (token: Token) => {
+    if (token) {
+      setStripeToken(token);
+    }
+  };
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try{
+        const response = await axios.post("http://localhost:3000/stripe/payment", 
+        {
+          token: stripeToken?.id,
+          amount: 2000
+        }
+        )
+        console.log(response.data)
+
+      }catch(err){
+        console.log(err)
+      }
+    }
+    stripeToken && makeRequest
+  }, [stripeToken])
+
   return (
     <Container>
       <Navbar />
@@ -167,70 +227,48 @@ const Cart = () => {
         <Top>
           <TopButton>CONTINUE SHOPPING</TopButton>
           <TopTexts>
-            <TopText>Shopping Cart(2)</TopText>
+            <TopText>Shopping Cart({cart.quantity})</TopText>
             <TopText>Your Wishlist (0)</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> JESSIE THUNDER SHOES
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 37.5
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <AddIcon />
-                  <ProductAmount>2</ProductAmount>
-                  <RemoveIcon />
-                </ProductAmountContainer>
-                <ProductPrice>300 Rs</ProductPrice>
-              </PriceDetail>
-            </Product>
-            <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://i.pinimg.com/originals/2d/af/f8/2daff8e0823e51dd752704a47d5b795c.png" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> HAKURA T-SHIRT
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="gray" />
-                  <ProductSize>
-                    <b>Size:</b> M
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <AddIcon />
-                  <ProductAmount>1</ProductAmount>
-                  <RemoveIcon />
-                </ProductAmountContainer>
-                <ProductPrice>200 Rs</ProductPrice>
-              </PriceDetail>
-            </Product>
+            {cart.products.map((item:Product) => {
+              return (
+                <Product>
+                  <ProductDetail>
+                    <Image src={item.img} />
+                    <Details>
+                      <ProductName>
+                        <b>Product:</b> {item.title}
+                      </ProductName>
+                      <ProductId>
+                        <b>ID:</b> {item._id}
+                      </ProductId>
+                      <ProductColor color={item.color} />
+                      <ProductSize>
+                        <b>Size:</b> {item.size}
+                      </ProductSize>
+                    </Details>
+                  </ProductDetail>
+                  <PriceDetail>
+                    <ProductAmountContainer>
+                      <AddIcon />
+                      <ProductAmount>{item.quantity}</ProductAmount>
+                      <RemoveIcon />
+                    </ProductAmountContainer>
+                    <ProductPrice>{item.price} Rs</ProductPrice>
+                  </PriceDetail>
+                </Product>
+              );
+            })}
           </Info>
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>800 Rs</SummaryItemPrice>
+              <SummaryItemPrice>{cart.total} Rs</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -242,9 +280,22 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>800 Rs</SummaryItemPrice>
+              <SummaryItemPrice>{cart.total} Rs</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
+            <StripeCheckout
+                name="Verve"
+                image="/vite.svg"
+                billingAddress
+                shippingAddress
+                description = {`Your cart total is ${cart.total}`}
+                amount={cart.total * 100}
+                token={onToken}
+                stripeKey={key}
+              >
+            <Button>
+              Checkout Now
+            </Button>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>

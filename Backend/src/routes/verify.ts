@@ -5,12 +5,13 @@ interface CustomRequest extends Request {
   user?: any;
 }
 
+
 const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     const secretKey = process.env.secretKey;
 
     if (!secretKey) {
-      throw new Error("Cannot find secret key");
+      return
     }
 
     const authHeader: string | undefined = req.headers.authorization;
@@ -41,6 +42,7 @@ const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
     return res.status(401).json({ error: "Invalid token" });
   }
 };
+
 
 const verifyTokenAndAuth = (
   req: CustomRequest,

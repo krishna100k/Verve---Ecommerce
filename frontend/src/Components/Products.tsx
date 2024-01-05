@@ -5,6 +5,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import axios from "axios";
 import url from "../url";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 interface Product {
   _id: string;
@@ -55,9 +56,10 @@ const Boxes = styled.div`
   width: 25rem;
   aspect-ratio: 1/1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #e5ebee;
+  background-color: #f5fafd;
   position: relative;
 
   &:hover ${Modal} {
@@ -87,7 +89,16 @@ const Icon = styled.div`
   }
 `;
 
+const Title = styled.h3`
+  align-self: flex-start;
+  padding: 15px 0px 0px 0px;
+  font-weight: 300;
+`
+
 const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) => {
+
+  const navigate = useNavigate()
+
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
@@ -148,6 +159,10 @@ const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) =>
     }
   }, [filters, sort]);
 
+  const handleView = (id: string) => {
+    navigate(`/product/${id}`)
+  }
+
 
   return (
     <Container>
@@ -161,7 +176,7 @@ const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) =>
                 <ShoppingCartOutlinedIcon />
               </Icon>
               <Icon>
-                <SearchOutlinedIcon />
+                <SearchOutlinedIcon onClick = {() => handleView(product._id)} />
               </Icon>
               <Icon>
                 <FavoriteBorderOutlinedIcon />
@@ -175,12 +190,13 @@ const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) =>
         return (
           <Boxes key={product._id}>
             <Image src={product.img} />
+            <Title>{product.title}</Title>
             <Modal>
               <Icon>
                 <ShoppingCartOutlinedIcon />
               </Icon>
               <Icon>
-                <SearchOutlinedIcon />
+                <SearchOutlinedIcon onClick = {() => handleView(product._id)} />
               </Icon>
               <Icon>
                 <FavoriteBorderOutlinedIcon />
