@@ -4,8 +4,8 @@ import axios from "axios"
 import url from "../url";
 import { useState } from "react";
 import { FormEvent } from "react";
-import { useDispatch } from "react-redux";
-import { loginFailure, loginRequest, loginSuccess } from "../redux/userSlice";
+// import { useDispatch } from "react-redux";
+// import { loginFailure, loginRequest, loginSuccess } from "../redux/userSlice";
 import { useNavigate } from "react-router";
 import Navbar from "../Components/Navbar";
 
@@ -82,7 +82,7 @@ padding-bottom: 10px;
 
 const Register = () => {
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState<string | undefined>("");
@@ -113,7 +113,7 @@ const Register = () => {
       return
     }
 
-    dispatch(loginRequest())
+    // dispatch(loginRequest())
 
     const options = {
       username,
@@ -124,7 +124,7 @@ const Register = () => {
       const response = await axios.post(`${url}/auth/register`, options);
       console.log(response.data)
 
-      dispatch(loginSuccess({user: response.data}))
+      // dispatch(loginSuccess({user: response.data}))
       setError("Resistration successful, please login !")
       navigate("/login")
 
@@ -132,7 +132,7 @@ const Register = () => {
     }catch(err: unknown){
       console.log(err)
       setError("Username or Email already exists !")
-      dispatch(loginFailure({error: err.message}))
+      // dispatch(loginFailure({error: err.message}))
     }
 
   }

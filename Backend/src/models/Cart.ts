@@ -1,8 +1,8 @@
 import mongoose, {Schema, Document} from "mongoose";
 
 export interface ICart extends Document{
-    userId: string,
-    products: [object]
+    userId?: string,
+    products?: [object]
 }
 
 const cartSchema = new mongoose.Schema<ICart>(

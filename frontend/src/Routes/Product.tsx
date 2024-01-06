@@ -11,14 +11,18 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import url from "../url";
+import { useSelector } from "react-redux";
+import { UserState } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../redux/cartSlice";
+import { State, changeHandler } from "../redux/cartSlice";
+
 
 interface bg {
   bg: string | undefined;
 }
 
 interface Product {
+  _id?: string | undefined;
   title?: string | undefined;
   img?: string | undefined;
   price?: number | undefined;
@@ -155,7 +159,19 @@ const Product = () => {
   const [counter, setCounter] = useState<number>(1);
   const [size, setSize] = useState<string>("");
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+
+  const userId = useSelector(
+    (state: UserState | undefined) => state?.user?.user?.user?.id
+  );
+
+  interface Change{
+    cart: State
+  }
+
+
+  const token = localStorage.getItem("token");
+  const change = useSelector((state:Change) => state.cart.change)
 
   useEffect(() => {
     const product = async () => {
@@ -168,31 +184,39 @@ const Product = () => {
     };
 
     product();
+
   }, [id]);
 
-  const cartProduct: Product = {
-    ...product,
-    size: size,
-    quantity: counter,
-  };
+
+
 
   const addToCart = () => {
     if (size === "") {
       alert("please select a size");
     } else {
-      if (cartProduct.price !== undefined) {
-        dispatch(
-          addProduct({
-            product: cartProduct,
-            price: cartProduct.price,
-            totalQuantity: counter,
-            total: cartProduct.price * counter,
-          })
-        );
-      } else {
-        // Handle the case where cartProduct.price is undefined
-        console.error("Product price is undefined");
-      }
+
+
+      const fetchCart = async () => {
+        const options = {
+          productId: product?._id,
+          quantity: counter
+        }
+
+
+
+        const headers = {
+          Authorization: `Bearer ${token}`
+        }
+        try {
+          const post = await axios.post(`${url}/cart/${userId}`, options, {headers});
+          console.log(post);
+          dispatch(changeHandler({change: change + 1}))
+          alert("Added to cart successfully !")
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchCart();
     }
 
     setCounter(1);

@@ -225,7 +225,7 @@ const Cart: React.FC = () => {
       <Wrapper>
         <Title>YOUR CART</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <TopButton onClick={() => window.history.back()}>CONTINUE SHOPPING</TopButton>
           <TopTexts>
             <TopText>Shopping Cart({cart.quantity})</TopText>
             <TopText>Your Wishlist (0)</TopText>

@@ -108,6 +108,7 @@ const Navbar = () => {
   const logoutFunc = () => {
     localStorage.removeItem("token");
     dispatch(logout());
+    navigate("/");
   };
 
   return (
@@ -134,7 +135,7 @@ const Navbar = () => {
           </Right>
         ) : (
           <Right>
-            <RightButton>{user?.username.toUpperCase()}</RightButton>
+            <RightButton>{user?.username}</RightButton>
             <RightButton onClick={logoutFunc}>LOGOUT</RightButton>
             <RightButton>
               <Badge

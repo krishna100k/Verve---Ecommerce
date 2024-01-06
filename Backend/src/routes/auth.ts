@@ -3,6 +3,7 @@ import User, { IUser } from "../models/User";
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
 import verifyToken from "./verify";
+import Cart, { ICart } from "../models/Cart";
 
 const router = express.Router();
 
