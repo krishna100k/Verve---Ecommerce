@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { State, changeHandler } from "../redux/cartSlice";
 import url from "../url";
 import { User, UserState } from "../redux/userSlice";
+import { useNavigate } from "react-router";
 
 interface Topbutton {
   type?: string;
@@ -193,6 +194,7 @@ const Button = styled.button`
 const Cart: React.FC = () => {
   const cart = useSelector((state: CartState) => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const key =
     "pk_test_51OD09rSCBYeXMCGHYdNUXlpe78oHBYfUiXDJgX50yybLQEyrBN9ZPsgritU2IF2mBZ7PgmKPRyh1nYBngs6IYbyE00szMMyd00";
@@ -261,7 +263,7 @@ const Cart: React.FC = () => {
           </TopButton>
           <TopTexts>
             <TopText>Shopping Cart({cart.quantity})</TopText>
-            <TopText>Your Wishlist (0)</TopText>
+            <TopText onClick={() => navigate("/wishlist")}>Your Wishlist (0)</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>

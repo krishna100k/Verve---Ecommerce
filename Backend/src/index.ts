@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
@@ -9,6 +8,7 @@ import productRoute from "./routes/products";
 import cartRoute from "./routes/cart";
 import orderRoute from "./routes/order";
 import stripeRoute from "./routes/stripe";
+import wishlistRoute from "./routes/Wishlist"
 
 const app: any = express();
 const port: number = 3000;
@@ -39,6 +39,7 @@ app.use("/product", productRoute);
 app.use("/cart", cartRoute);
 app.use("/orders", orderRoute);
 app.use("/stripe", stripeRoute);
+app.use("/wish", wishlistRoute );
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript with Express!");

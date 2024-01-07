@@ -6,6 +6,9 @@ import axios from "axios";
 import url from "../url";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+
+
 
 interface Product {
   _id: string;
@@ -44,7 +47,7 @@ const Modal = styled.div`
 
 const Container = styled.div`
   margin-top: 1rem;
-  width: 100%; 
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -93,14 +96,20 @@ const Title = styled.h3`
   align-self: flex-start;
   padding: 15px 0px 0px 0px;
   font-weight: 300;
-`
+`;
 
-const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) => {
-
-  const navigate = useNavigate()
+const Products: React.FC<ProductsProps> = ({
+  category,
+  filters,
+  sort,
+  home,
+}) => {
+  const navigate = useNavigate();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -142,69 +151,137 @@ const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) =>
     );
   }, [products, filters]);
 
-
   useEffect(() => {
     if (sort === "Newest") {
       setFilteredProducts((prevState) => {
-        return [...prevState.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())];
+        return [
+          ...prevState.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          ),
+        ];
       });
-    }else if (sort === "Price (asc)"){
+    } else if (sort === "Price (asc)") {
       setFilteredProducts((prevState) => {
-        return [...prevState.sort((a, b) => a.price - b.price)]
-      })
-    }else{
+        return [...prevState.sort((a, b) => a.price - b.price)];
+      });
+    } else {
       setFilteredProducts((prevState) => {
-        return [...prevState.sort((a, b) => b.price - a.price)]
-      })
+        return [...prevState.sort((a, b) => b.price - a.price)];
+      });
     }
   }, [filters, sort]);
 
   const handleView = (id: string) => {
-    navigate(`/product/${id}`)
-  }
+    navigate(`/product/${id}`);
+  };
 
+  const userId = useSelector(
+    (state: { user: { user: { user: { _id: string } } } }) =>
+      state?.user?.user?.user?._id
+  );
+
+  const token = localStorage.getItem("token");
+
+  const addToWish = async (
+    productId: string,
+    productImg: string,
+    productTitle: string,
+    productSize: string,
+    productColor: string
+  ) => {
+    const options = {
+      productId,
+      productImg,
+      productTitle,
+      productSize,
+      productColor,
+    };
+
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    try {
+      if (userId) {
+        const response = await axios.post(`${url}/wish/${userId}`, options, {
+          headers,
+        });
+        console.log(response);
+        alert("Added To Wishlist !")
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Container>
-      
-      {home ? filteredProducts.slice(0,8).map((product: Product) => {
-        return (
-          <Boxes key={product._id}>
-            <Image src={product.img} />
-            <Modal>
-              <Icon>
-                <ShoppingCartOutlinedIcon onClick = {() => navigate("/cart")} />
-              </Icon>
-              <Icon>
-                <SearchOutlinedIcon onClick = {() => handleView(product._id)} />
-              </Icon>
-              <Icon>
-                <FavoriteBorderOutlinedIcon />
-              </Icon>
-            </Modal>
-          </Boxes>
-        );
-      }) 
-      : 
-      filteredProducts.map((product: Product) => {
-        return (
-          <Boxes key={product._id}>
-            <Image src={product.img} />
-            <Title>{product.title}</Title>
-            <Modal>
-              <Icon>
-                <ShoppingCartOutlinedIcon />
-              </Icon>
-              <Icon>
-                <SearchOutlinedIcon onClick = {() => handleView(product._id)} />
-              </Icon>
-              <Icon>
-                <FavoriteBorderOutlinedIcon />
-              </Icon>
-            </Modal>
-          </Boxes>
-        );
-      })}
+      {home
+        ? filteredProducts.slice(0, 8).map((product: Product) => {
+            return (
+              <Boxes key={product._id}>
+                <Image src={product.img} />
+                <Modal>
+                  <Icon>
+                    <ShoppingCartOutlinedIcon
+                      onClick={() => navigate("/cart")}
+                    />
+                  </Icon>
+                  <Icon>
+                    <SearchOutlinedIcon
+                      onClick={() => handleView(product._id)}
+                    />
+                  </Icon>
+                  <Icon>
+                    <FavoriteBorderOutlinedIcon
+                      onClick={() =>
+                        addToWish(
+                          product._id,
+                          product.img,
+                          product.title,
+                          product.size,
+                          product.color
+                        )
+                      }
+                    />
+                  </Icon>
+                </Modal>
+              </Boxes>
+            );
+          })
+        : filteredProducts.map((product: Product) => {
+            return (
+              <Boxes key={product._id}>
+                <Image src={product.img} />
+                <Title>{product.title}</Title>
+                <Modal>
+                  <Icon>
+                    <ShoppingCartOutlinedIcon />
+                  </Icon>
+                  <Icon>
+                    <SearchOutlinedIcon
+                      onClick={() => handleView(product._id)}
+                    />
+                  </Icon>
+                  <Icon>
+                    <FavoriteBorderOutlinedIcon
+                      onClick={() =>
+                        addToWish(
+                          product._id,
+                          product.img,
+                          product.title,
+                          product.size,
+                          product.color
+                        )
+                      }
+                    />
+                  </Icon>
+                </Modal>
+              </Boxes>
+            );
+          })}
     </Container>
   );
 };

@@ -9,6 +9,7 @@ import Product from "./Routes/Product";
 import Login from "./Routes/Login";
 import Cart from "./Routes/Cart";
 import Register from "./Routes/Register";
+import WishList from "./Routes/WishList";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/wishlist" element={<WishList />} />
       </Routes>
     </BrowserRouter>
   );
