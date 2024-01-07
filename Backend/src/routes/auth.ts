@@ -59,7 +59,7 @@ router.post("/login", async (req: Request, res: Response) => {
     const decryptedPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
     const token = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin, username: user.username },
+      { _id: user._id, isAdmin: user.isAdmin, username: user.username },
       secretKey
     );
 

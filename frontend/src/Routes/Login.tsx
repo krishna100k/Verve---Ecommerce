@@ -7,6 +7,13 @@ import { useDispatch } from "react-redux";
 import { loginFailure, loginRequest, loginSuccess } from "../redux/userSlice";
 import { useNavigate } from "react-router";
 import Navbar from "../Components/Navbar";
+// import { changeHandler } from "../redux/cartSlice";
+// import { useSelector } from "react-redux";
+// import { State } from "../redux/cartSlice";
+
+// interface Change{
+//   cart: State
+// }
 
 const Container = styled.div`
   width: 100vw;
@@ -87,6 +94,8 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  // const change = useSelector((state:Change) => state.cart.change);
+
   const fetch = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -105,7 +114,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${url}/auth/login`, options);
-      console.log(response);
+      console.log(response.data.user);
       dispatch(loginSuccess({user: response.data.user}))
       setError("Login Successful!");
       localStorage.setItem('token', response.data.token);

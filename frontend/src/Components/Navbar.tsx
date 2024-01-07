@@ -5,7 +5,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { State, Product } from "../redux/cartSlice";
+import { State, Product, addProduct, changeHandler } from "../redux/cartSlice";
 import { UserState, User, logout } from "../redux/userSlice";
 
 interface UserSlice extends UserState {
@@ -107,6 +107,8 @@ const Navbar = () => {
 
   const logoutFunc = () => {
     localStorage.removeItem("token");
+    dispatch(addProduct({product: [], total: 0, quantity: 0}))
+    dispatch(changeHandler({change: 0}))
     dispatch(logout());
     navigate("/");
   };

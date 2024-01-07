@@ -9,9 +9,11 @@ interface Product {
   quantity?: number;
 }
 
-router.post("/:userId", verifyToken,  async (req: Request, res: Response) => {
+router.post("/:userId", verifyToken, async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const { productId, quantity } = req.body;
+
+  console.log(userId);
 
   try {
     const cart: ICart | null = await Cart.findOne({ userId });
@@ -32,34 +34,35 @@ router.post("/:userId", verifyToken,  async (req: Request, res: Response) => {
       let updatedCart = await cart.save();
       res.status(200).send(updatedCart);
     } else {
-      let newCart = new Cart({
-        userId,
-        products: [
-          {
-            productId,
-            quantity,
-          },
-        ],
-      });
-      let updatedCart = await newCart.save();
-      res.status(200).send(updatedCart);
+      if (userId !== undefined) {
+        let newCart = new Cart({
+          userId,
+          products: [
+            {
+              productId,
+              quantity,
+            },
+          ],
+        });
+        let updatedCart = await newCart.save();
+        res.status(200).send(updatedCart);
+      }
     }
   } catch (err) {
     res.status(400).send(err);
   }
 });
 
-
-router.get("/:userId", verifyToken,  async (req:Request, res: Response) => {
+router.get("/:userId", verifyToken, async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
-  try{
-    const cart = await Cart.findOne({userId})
+  try {
+    const cart = await Cart.findOne({ userId });
     res.status(200).send(cart);
-  }catch(err){
+  } catch (err) {
     res.status(400).send(err);
   }
-})
+});
 
 //CREATE
 // router.post("/", verifyToken, async (req: Request, res: Response) => {

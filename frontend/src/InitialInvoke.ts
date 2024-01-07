@@ -10,15 +10,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Product from "./Routes/Product";
-import { State, addProduct } from "./redux/cartSlice";
+import { State, addProduct,  } from "./redux/cartSlice";
 
 interface CartProduct {
   productId?: string;
   quantity?: number;
 }
 
-interface Change{
-  cart: State
+interface Change {
+  cart: State;
 }
 
 const InitialInvoke = () => {
@@ -27,7 +27,7 @@ const InitialInvoke = () => {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
-  const change = useSelector((state:Change) => state.cart.change);
+  const change = useSelector((state: Change) => state.cart.change);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,6 +40,7 @@ const InitialInvoke = () => {
       dispatch(loginRequest());
       try {
         const response = await axios.get(`${url}/auth/me`, { headers });
+        console.log(response.data)
         dispatch(loginSuccess({ user: response.data.user }));
       } catch (err) {
         console.log(err);
@@ -50,7 +51,20 @@ const InitialInvoke = () => {
     logIn();
   }, [dispatch]);
 
-  const userId = useSelector((state: User) => state?.user?.user?.user?.id);
+  const stateUser = useSelector((state: User) => state?.user?.user?.user);
+  console.log(stateUser);
+  let isLoggedin: boolean = false;
+  if (stateUser) {
+    isLoggedin = true;
+  } else {
+    false;
+  }
+
+  console.log(isLoggedin)
+
+  const userId = useSelector((state: User) => state?.user?.user?.user?._id);
+
+  console.log(userId)
 
   useEffect(() => {
     const fetch = async () => {
@@ -69,7 +83,7 @@ const InitialInvoke = () => {
       setCartProducts(cartId.data.products);
     };
     fetch();
-  }, [userId, change]);
+  }, [userId, change, isLoggedin]);
 
   useEffect(() => {
     if (cartProducts && products) {

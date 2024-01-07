@@ -2,13 +2,13 @@ import styled from "styled-components";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import Announcement from "../Components/Announcement";
-import AddIcon from "@mui/icons-material/Add";
+// import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
-import StripeCheckout, { Token } from 'react-stripe-checkout';
+import StripeCheckout, { Token } from "react-stripe-checkout";
 import { useState } from "react";
-import axios from "axios"
+import axios from "axios";
 import { useEffect } from "react";
 import { State } from "../redux/cartSlice";
 
@@ -30,8 +30,8 @@ interface Product {
   quantity?: number;
 }
 
-interface CartState{
-  cart:State;
+interface CartState {
+  cart: State;
 }
 
 const Container = styled.div`
@@ -188,7 +188,7 @@ const Button = styled.button`
 const Cart: React.FC = () => {
   const cart = useSelector((state: CartState) => state.cart);
 
-  console.log(cart)
+  console.log(cart);
 
   const key =
     "pk_test_51OD09rSCBYeXMCGHYdNUXlpe78oHBYfUiXDJgX50yybLQEyrBN9ZPsgritU2IF2mBZ7PgmKPRyh1nYBngs6IYbyE00szMMyd00";
@@ -202,21 +202,21 @@ const Cart: React.FC = () => {
 
   useEffect(() => {
     const makeRequest = async () => {
-      try{
-        const response = await axios.post("http://localhost:3000/stripe/payment", 
-        {
-          token: stripeToken?.id,
-          amount: 2000
-        }
-        )
-        console.log(response.data)
-
-      }catch(err){
-        console.log(err)
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/stripe/payment",
+          {
+            token: stripeToken?.id,
+            amount: 2000,
+          }
+        );
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
       }
-    }
-    stripeToken && makeRequest
-  }, [stripeToken])
+    };
+    stripeToken && makeRequest;
+  }, [stripeToken]);
 
   return (
     <Container>
@@ -225,7 +225,9 @@ const Cart: React.FC = () => {
       <Wrapper>
         <Title>YOUR CART</Title>
         <Top>
-          <TopButton onClick={() => window.history.back()}>CONTINUE SHOPPING</TopButton>
+          <TopButton onClick={() => window.history.back()}>
+            CONTINUE SHOPPING
+          </TopButton>
           <TopTexts>
             <TopText>Shopping Cart({cart.quantity})</TopText>
             <TopText>Your Wishlist (0)</TopText>
@@ -234,7 +236,7 @@ const Cart: React.FC = () => {
         </Top>
         <Bottom>
           <Info>
-            {cart.products.map((item:Product) => {
+            {cart.products.map((item: Product) => {
               return (
                 <Product>
                   <ProductDetail>
@@ -254,9 +256,9 @@ const Cart: React.FC = () => {
                   </ProductDetail>
                   <PriceDetail>
                     <ProductAmountContainer>
-                      <AddIcon />
                       <ProductAmount>{item.quantity}</ProductAmount>
-                      <RemoveIcon />
+                      {/* <CloseIcon /> */}
+                      <RemoveIcon style={{cursor: "pointer"}} />
                     </ProductAmountContainer>
                     <ProductPrice>{item.price} Rs</ProductPrice>
                   </PriceDetail>
@@ -283,18 +285,16 @@ const Cart: React.FC = () => {
               <SummaryItemPrice>{cart.total} Rs</SummaryItemPrice>
             </SummaryItem>
             <StripeCheckout
-                name="Verve"
-                image="/vite.svg"
-                billingAddress
-                shippingAddress
-                description = {`Your cart total is ${cart.total}`}
-                amount={cart.total * 100}
-                token={onToken}
-                stripeKey={key}
-              >
-            <Button>
-              Checkout Now
-            </Button>
+              name="Verve"
+              image="/vite.svg"
+              billingAddress
+              shippingAddress
+              description={`Your cart total is ${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={key}
+            >
+              <Button>Checkout Now</Button>
             </StripeCheckout>
           </Summary>
         </Bottom>

@@ -15,7 +15,10 @@ import { useSelector } from "react-redux";
 import { UserState } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { State, changeHandler } from "../redux/cartSlice";
-
+import Snackbar from "@mui/material/Snackbar";
+import { IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import React from "react";
 
 interface bg {
   bg: string | undefined;
@@ -159,19 +162,35 @@ const Product = () => {
   const [counter, setCounter] = useState<number>(1);
   const [size, setSize] = useState<string>("");
 
-  const dispatch = useDispatch()
+  //snackbar
+  const [open, setOpen] = useState(false)
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={() => setOpen(false)}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+  //
+  const dispatch = useDispatch();
 
   const userId = useSelector(
-    (state: UserState | undefined) => state?.user?.user?.user?.id
+    (state: UserState | null) => state?.user?.user?.user?._id
   );
 
-  interface Change{
-    cart: State
+  console.log(userId);
+
+  interface Change {
+    cart: State;
   }
 
-
   const token = localStorage.getItem("token");
-  const change = useSelector((state:Change) => state.cart.change)
+  const change = useSelector((state: Change) => state.cart.change);
 
   useEffect(() => {
     const product = async () => {
@@ -184,39 +203,36 @@ const Product = () => {
     };
 
     product();
-
   }, [id]);
 
-
-
-
   const addToCart = () => {
+
     if (size === "") {
       alert("please select a size");
-    } else {
-
-
+    } else if (userId !== undefined) {
       const fetchCart = async () => {
         const options = {
           productId: product?._id,
-          quantity: counter
-        }
-
-
+          quantity: counter,
+        };
 
         const headers = {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        };
         try {
-          const post = await axios.post(`${url}/cart/${userId}`, options, {headers});
+          const post = await axios.post(`${url}/cart/${userId}`, options, {
+            headers,
+          });
           console.log(post);
-          dispatch(changeHandler({change: change + 1}))
-          alert("Added to cart successfully !")
+          dispatch(changeHandler({ change: change + 1 }));
         } catch (err) {
           console.log(err);
         }
       };
       fetchCart();
+      setOpen(true)
+    }else{
+      setOpen(true);
     }
 
     setCounter(1);
@@ -269,6 +285,13 @@ const Product = () => {
               />
             </CounterContainer>
             <Button onClick={addToCart}>Add To Cart</Button>
+            <Snackbar
+              open={open}
+              autoHideDuration={5}
+              // onClose={handleClose}
+              message={userId !==undefined ? "Successfully added to cart!" : "Please login to access cart !"}
+              action={action}
+            />
           </LowerContainer>
         </Right>
       </Wrapper>

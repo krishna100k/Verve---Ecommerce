@@ -34,7 +34,7 @@ const cartSlice = createSlice({
       state.quantity = action.payload.quantity;
       const newProducts = action.payload.product;
       state.products = [...newProducts];
-      state.total += action.payload.total;
+      state.total = action.payload.total;
     },
     changeHandler: (state, action) => {
         state.change = action.payload.change;
