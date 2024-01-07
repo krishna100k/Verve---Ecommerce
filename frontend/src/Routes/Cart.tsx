@@ -2,18 +2,23 @@ import styled from "styled-components";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import Announcement from "../Components/Announcement";
-// import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { mobile } from "../responsive";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import StripeCheckout, { Token } from "react-stripe-checkout";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import { State } from "../redux/cartSlice";
+import { State, changeHandler } from "../redux/cartSlice";
+import url from "../url";
+import { User, UserState } from "../redux/userSlice";
 
 interface Topbutton {
   type?: string;
+}
+
+interface UserSlice extends UserState {
+  user: User;
 }
 
 interface Product {
@@ -187,8 +192,7 @@ const Button = styled.button`
 
 const Cart: React.FC = () => {
   const cart = useSelector((state: CartState) => state.cart);
-
-  console.log(cart);
+  const dispatch = useDispatch();
 
   const key =
     "pk_test_51OD09rSCBYeXMCGHYdNUXlpe78oHBYfUiXDJgX50yybLQEyrBN9ZPsgritU2IF2mBZ7PgmKPRyh1nYBngs6IYbyE00szMMyd00";
@@ -218,6 +222,33 @@ const Cart: React.FC = () => {
     stripeToken && makeRequest;
   }, [stripeToken]);
 
+  const change = useSelector((state: {cart: {change: number}} ) => state.cart.change);
+  console.log(change)
+  const userId = useSelector((state: UserSlice) => state.user?.user?.user?._id);
+
+  const token = localStorage.getItem("token");
+
+
+  const removeProduct = async (productId: string) => {
+    const options = {
+      productId: productId,
+    };
+
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    try {
+      const response = await axios.put(`${url}/cart/${userId}`, options, {
+        headers,
+      });
+      console.log(response)
+      dispatch(changeHandler({ change: change + 1 }));
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Container>
       <Navbar />
@@ -238,7 +269,7 @@ const Cart: React.FC = () => {
           <Info>
             {cart.products.map((item: Product) => {
               return (
-                <Product>
+                <Product key={item._id}>
                   <ProductDetail>
                     <Image src={item.img} />
                     <Details>
@@ -257,8 +288,10 @@ const Cart: React.FC = () => {
                   <PriceDetail>
                     <ProductAmountContainer>
                       <ProductAmount>{item.quantity}</ProductAmount>
-                      {/* <CloseIcon /> */}
-                      <RemoveIcon style={{cursor: "pointer"}} />
+                      <RemoveIcon
+                        onClick={() => removeProduct(item._id)}
+                        style={{ cursor: "pointer" }}
+                      />
                     </ProductAmountContainer>
                     <ProductPrice>{item.price} Rs</ProductPrice>
                   </PriceDetail>

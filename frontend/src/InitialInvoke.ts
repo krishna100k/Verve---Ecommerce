@@ -104,9 +104,12 @@ const InitialInvoke = () => {
     }
   }, [cartProducts, products]);
 
+
+
+
   useEffect(() => {
-    if (filteredProducts && filteredProducts.length > 0) {
-      console.log(filteredProducts);
+    if (filteredProducts && filteredProducts.length >= 0) {
+
       let total = 0;
       filteredProducts.forEach((product) => {
         if (product.price && product.quantity) {

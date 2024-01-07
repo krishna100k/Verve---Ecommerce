@@ -173,7 +173,7 @@ const Products: React.FC<ProductsProps> = ({ category, filters, sort, home }) =>
             <Image src={product.img} />
             <Modal>
               <Icon>
-                <ShoppingCartOutlinedIcon />
+                <ShoppingCartOutlinedIcon onClick = {() => navigate("/cart")} />
               </Icon>
               <Icon>
                 <SearchOutlinedIcon onClick = {() => handleView(product._id)} />

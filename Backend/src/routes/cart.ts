@@ -9,11 +9,14 @@ interface Product {
   quantity?: number;
 }
 
+interface userCart {
+  save(): unknown;
+  products: Product[];
+}
+
 router.post("/:userId", verifyToken, async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const { productId, quantity } = req.body;
-
-  console.log(userId);
 
   try {
     const cart: ICart | null = await Cart.findOne({ userId });
@@ -61,6 +64,26 @@ router.get("/:userId", verifyToken, async (req: Request, res: Response) => {
     res.status(200).send(cart);
   } catch (err) {
     res.status(400).send(err);
+  }
+});
+
+router.put("/:userId", verifyToken, async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const productId = req.body.productId;
+
+  try {
+    const userCart: userCart | null = await Cart.findOne({ userId });
+    if (userCart) {
+      let updatedProducts = userCart.products?.filter((product) => {
+        return product.productId !== productId;
+      });
+
+      userCart.products = updatedProducts;
+      let filteredProducts = await userCart.save();
+      res.status(200).send(filteredProducts);
+    }
+  } catch (err) {
+    res.status(500).send(err)
   }
 });
 
