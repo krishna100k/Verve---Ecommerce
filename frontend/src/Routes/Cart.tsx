@@ -100,6 +100,7 @@ const ProductDetail = styled.div`
   flex: 2;
   display: flex;
   ${mobile({ flexDirection: "column" })}
+  cursor: pointer;
 `;
 
 const Image = styled.img`
@@ -263,7 +264,7 @@ const Cart: React.FC = () => {
           </TopButton>
           <TopTexts>
             <TopText>Shopping Cart({cart.quantity})</TopText>
-            <TopText onClick={() => navigate("/wishlist")}>Your Wishlist (0)</TopText>
+            <TopText onClick={() => navigate("/wishlist")}>Your Wishlist</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
@@ -272,7 +273,7 @@ const Cart: React.FC = () => {
             {cart.products.map((item: Product) => {
               return (
                 <Product key={item._id}>
-                  <ProductDetail>
+                  <ProductDetail onClick={() => navigate(`/product/${item._id}`)}>
                     <Image src={item.img} />
                     <Details>
                       <ProductName>

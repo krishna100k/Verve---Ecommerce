@@ -94,6 +94,7 @@ const ProductDetail = styled.div`
   flex: 2;
   display: flex;
   ${mobile({ flexDirection: "column" })}
+  cursor: pointer;
 `;
 
 const Image = styled.img`
@@ -197,6 +198,8 @@ const WishList: React.FC = () => {
 
   const token = localStorage.getItem("token");
 
+  const [updater, setUpdater] = useState(0);
+
   useEffect(() => {
     const fetch = async () => {
       const headers = {
@@ -212,7 +215,19 @@ const WishList: React.FC = () => {
     };
 
     fetch();
-  }, [userId, token]);
+  }, [userId, token, updater]);
+
+  const removeProduct = async (productId : string) => {
+    const options = {
+      productId
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+    const response = await axios.put(`${url}/wish/remove/${userId}`, options, {headers});
+    setUpdater((state) => state + 1)
+    console.log(response.data.message);
+  }
 
   return (
     <Container>
@@ -240,7 +255,7 @@ const WishList: React.FC = () => {
               products.map((item: Product) => {
                 return (
                   <Product key={item.productId}>
-                    <ProductDetail>
+                    <ProductDetail onClick={() => navigate(`/product/${item.productId}`)}>
                       <Image src={item.productImg} />
                       <Details>
                         <ProductName>
@@ -258,7 +273,7 @@ const WishList: React.FC = () => {
                     <PriceDetail>
                       <ProductAmountContainer>
                         {/* <ProductAmount>{item.quantity}</ProductAmount> */}
-                        <RemoveIcon style={{ cursor: "pointer" }} />
+                        <RemoveIcon onClick = {() => removeProduct(item.productId)} style={{ cursor: "pointer" }} />
                       </ProductAmountContainer>
                       {/* <ProductPrice>{item.price} Rs</ProductPrice> */}
                     </PriceDetail>

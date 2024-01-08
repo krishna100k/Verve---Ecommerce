@@ -72,3 +72,28 @@ router.get("/:userId", verifyToken, async (req: Request, res: Response) => {
 });
 
 export default router;
+
+router.put("/remove/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const productId = req.body.productId;
+  
+  try {
+    const wish = await WishList.findOne({ userId });
+
+    if (wish !== null) {
+      const updatedProducts = (wish.products || []).filter((product) => {
+        return product.productId !== productId;
+      });
+
+      wish.products = updatedProducts;
+      await wish.save();
+      res.status(200).send({wish, message: 'Removed Successfully'});
+    } else {
+      res.status(404).send("Wishlist not found");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+

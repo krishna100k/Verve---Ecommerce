@@ -119,7 +119,8 @@ const Login = () => {
       setError("Login Successful!");
       localStorage.setItem('token', response.data.token);
       navigate("/")
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err:any) {
       console.log(err)
       dispatch(loginFailure(err.message))
       setError("Login Failed !")

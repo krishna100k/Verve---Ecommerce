@@ -10,7 +10,7 @@ interface Product{
 
 interface WishList extends Document{
 userId: string;
-products: Product[]
+products: Product[];
 }
 
 const WishlistSchema: Schema<WishList> = new mongoose.Schema({
