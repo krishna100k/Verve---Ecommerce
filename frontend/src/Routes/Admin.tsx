@@ -43,15 +43,40 @@ const Main = styled.div<ContainerProps>`
   margin-top: 4rem;
   margin-left: ${(props) => (props.sideBar ? "19vw" : "0px")};
   transition: all 0.5s ease-in-out;
-
+  
 
 &::-webkit-scrollbar {
-  width: 6px; /* Chrome, Safari, Opera */
+  width: 6px; 
 }
 
 &::-webkit-scrollbar-thumb {
   background-color: transparent; /* Chrome, Safari, Opera */
 }
+
+@media (max-width: 1636px) {
+  margin-left: ${(props) => (props.sideBar ? "22vw" : "0px")};
+  }
+
+  @media (max-width: 1432px) {
+  margin-left: ${(props) => (props.sideBar ? "25vw" : "0px")};
+  }
+
+  @media (max-width: 1244px) {
+  margin-left: ${(props) => (props.sideBar ? "30vw" : "0px")};
+  }
+
+  @media (max-width: 1044px) {
+  margin-left: ${(props) => (props.sideBar ? "35vw" : "0px")};
+  }
+
+  @media (max-width: 884px) {
+  margin-left: ${(props) => (props.sideBar ? "46vw" : "0px")};
+  }
+
+  @media (max-width: 670px) {
+  margin-left: 0px;
+  }
+
 
 `;
 
@@ -127,7 +152,7 @@ const Admin = () => {
     <Container>
       <AdminNavbar setSideBar={setSideBar} sideBar={sideBar} />
       <Wrapper>
-        <AdminSidebar sideBar={sideBar} />
+        <AdminSidebar sideBar={sideBar} setSideBar = {setSideBar} />
         <Main sideBar={sideBar}>
           <Header>All Orders</Header>
           <HeadingLine>

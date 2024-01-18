@@ -7,6 +7,7 @@ interface ContainerProps {
 
 interface Props {
   sideBar: boolean;
+  setSideBar: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -22,6 +23,11 @@ const Container = styled.div<ContainerProps>`
   overflow: hidden;
   position: fixed;
   z-index: 1;
+
+  @media (max-width: 670px) {
+    width: ${(props => props.sideBar ? "100%" : "0%")};
+  }
+
 `;
 
 const List = styled.p`
@@ -48,20 +54,21 @@ const Content = styled.div`
   border-radius: 10px;
 `;
 
-const AdminSidebar: React.FC<Props> = ({ sideBar }) => {
+const AdminSidebar: React.FC<Props> = ({ sideBar, setSideBar }) => {
 
     const navigate = useNavigate();
+
 
   return (
     <Container sideBar={sideBar}>
       <ListWrapper>
-        <Content onClick={() => navigate("/hpanel/orders")}>
+        <Content onClick={() => {setSideBar(!sideBar); navigate("/hpanel/orders") } }>
           <List>Orders</List>
         </Content>
-        <Content onClick={() => navigate("/hpanel/products")}>
+        <Content onClick={() => {setSideBar(!sideBar); navigate("/hpanel/products")}}>
           <List>Products</List>
         </Content>
-        <Content onClick={() => navigate("/hpanel/addproduct")}>
+        <Content onClick={() => {setSideBar(!sideBar); navigate("/hpanel/addproduct")}}>
           <List>Add Products</List>
         </Content>
       </ListWrapper>

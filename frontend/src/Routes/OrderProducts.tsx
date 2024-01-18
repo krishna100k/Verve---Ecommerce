@@ -159,7 +159,7 @@ const OrderProducts = () => {
     <Container>
       <AdminNavbar setSideBar={setSideBar} sideBar={sideBar} />
       <Wrapper>
-        <AdminSidebar sideBar={sideBar} />
+        <AdminSidebar sideBar={sideBar} setSideBar={setSideBar} />
         <Main sideBar={sideBar}>
           <Header>{order?.name}'s Products</Header>
           {order === null ? (
@@ -169,7 +169,7 @@ const OrderProducts = () => {
               return (
                 <Product>
                   <ProductDetail>
-                    <Image src={item.img} />
+                    <Image src={`${url}/uploads/${item.img}`} />
                     <Details>
                       <ProductName>
                         <b>Product:</b> {item.title}

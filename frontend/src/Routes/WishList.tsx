@@ -236,7 +236,7 @@ const WishList: React.FC = () => {
       <Wrapper>
         <Title>YOUR CART</Title>
         <Top>
-          <TopButton onClick={() => window.history.back()}>
+          <TopButton onClick={() => navigate("/")}>
             CONTINUE SHOPPING
           </TopButton>
           <TopTexts>

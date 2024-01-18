@@ -60,11 +60,11 @@ const InitialInvoke = () => {
     false;
   }
 
-  console.log(isLoggedin)
+
 
   const userId = useSelector((state: User) => state?.user?.user?.user?._id);
 
-  console.log(userId)
+
 
   useEffect(() => {
     const fetch = async () => {

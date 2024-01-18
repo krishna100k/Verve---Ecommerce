@@ -17,8 +17,9 @@ import { useDispatch } from "react-redux";
 import { State, changeHandler } from "../redux/cartSlice";
 import Snackbar from "@mui/material/Snackbar";
 import { IconButton } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
+import { CircularProgress } from "@mui/material";
 
 interface bg {
   bg: string | undefined;
@@ -158,12 +159,12 @@ const Button = styled.button`
 const Product = () => {
   const { id } = useParams();
 
-  const [product, setProduct] = useState<Partial<Product>>({});
+  const [product, setProduct] = useState<Partial<Product> | null>(null);
   const [counter, setCounter] = useState<number>(1);
   const [size, setSize] = useState<string>("");
 
   //snackbar
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const action = (
     <React.Fragment>
       <IconButton
@@ -182,8 +183,6 @@ const Product = () => {
   const userId = useSelector(
     (state: UserState | null) => state?.user?.user?.user?._id
   );
-
-  console.log(userId);
 
   interface Change {
     cart: State;
@@ -206,7 +205,6 @@ const Product = () => {
   }, [id]);
 
   const addToCart = () => {
-
     if (size === "") {
       alert("please select a size");
     } else if (userId !== undefined) {
@@ -230,8 +228,8 @@ const Product = () => {
         }
       };
       fetchCart();
-      setOpen(true)
-    }else{
+      setOpen(true);
+    } else {
       setOpen(true);
     }
 
@@ -242,59 +240,68 @@ const Product = () => {
     <Container>
       <Navbar />
       <Announcement />
-      <Wrapper>
-        <Left>
-          <Image src={product.img} />
-        </Left>
-        <Right>
-          <Title>{product.title}</Title>
-          <Desc>{product.desc}</Desc>
-          <Price> INR {product.price} /-</Price>
-          <Info>
-            <Colors>
-              <ColorTitle>Colors : </ColorTitle>
-              <Color bg={product?.color} />
-            </Colors>
-            <Size>
-              <SizeTitle>Size : </SizeTitle>
-              <Select onChange={(e) => setSize(e.target.value)}>
-                <Option selected disabled>
-                  Size
-                </Option>
-                <Option>S</Option>
-                <Option>M</Option>
-                <Option>L</Option>
-                <Option>XL</Option>
-                <Option>XXL</Option>
-                <Option>XXXL</Option>
-              </Select>
-            </Size>
-          </Info>
-          <LowerContainer>
-            <CounterContainer>
-              <RemoveIcon
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  counter >= 1 && setCounter(counter - 1);
-                }}
+      {!product ? (
+        <CircularProgress style={{position: "absolute", top: "20%", left: "50%"}} />
+      ) : (
+        <Wrapper>
+          <Left>
+            <Image src={`${url}/uploads/${product.img}`} />
+          </Left>
+          <Right>
+            <Title>{product.title}</Title>
+            <Desc>{product.desc}</Desc>
+            <Price> INR {product.price} /-</Price>
+            <Info>
+              <Colors>
+                <ColorTitle>Colors : </ColorTitle>
+                <Color bg={product?.color} />
+              </Colors>
+              <Size>
+                <SizeTitle>Size : </SizeTitle>
+                <Select onChange={(e) => setSize(e.target.value)}>
+                  <Option selected disabled>
+                    Size
+                  </Option>
+                  <Option>S</Option>
+                  <Option>M</Option>
+                  <Option>L</Option>
+                  <Option>XL</Option>
+                  <Option>XXL</Option>
+                  <Option>XXXL</Option>
+                </Select>
+              </Size>
+            </Info>
+            <LowerContainer>
+              <CounterContainer>
+                <RemoveIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    counter >= 1 && setCounter(counter - 1);
+                  }}
+                />
+                <Counter>{counter}</Counter>
+                <AddIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setCounter(counter + 1)}
+                />
+              </CounterContainer>
+              <Button onClick={addToCart}>Add To Cart</Button>
+              <Snackbar
+                open={open}
+                autoHideDuration={5}
+                // onClose={handleClose}
+                message={
+                  userId !== undefined
+                    ? "Successfully added to cart!"
+                    : "Please login to access cart !"
+                }
+                action={action}
               />
-              <Counter>{counter}</Counter>
-              <AddIcon
-                style={{ cursor: "pointer" }}
-                onClick={() => setCounter(counter + 1)}
-              />
-            </CounterContainer>
-            <Button onClick={addToCart}>Add To Cart</Button>
-            <Snackbar
-              open={open}
-              autoHideDuration={5}
-              // onClose={handleClose}
-              message={userId !==undefined ? "Successfully added to cart!" : "Please login to access cart !"}
-              action={action}
-            />
-          </LowerContainer>
-        </Right>
-      </Wrapper>
+            </LowerContainer>
+          </Right>
+        </Wrapper>
+      )}
+
       <NewsLetter />
       <Footer />
     </Container>

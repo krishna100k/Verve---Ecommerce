@@ -13,6 +13,8 @@ import Admin from "./Routes/Admin";
 import { useSelector } from "react-redux";
 import OrderProducts from "./Routes/OrderProducts";
 import AdminProducts from "./Routes/AdminProducts";
+import AddProduct from "./Routes/AddProduct";
+import EditProduct from "./Routes/EditProduct";
 
 function App() {
 
@@ -43,6 +45,8 @@ function App() {
             <Route path="hpanel" element={<Navigate to="/hpanel/orders" />} />
             <Route path="/hpanel/orders/:orderId" element={<OrderProducts />} />
             <Route path="/hpanel/products" element={<AdminProducts />} />
+            <Route path="/hpanel/addproduct" element={<AddProduct />} />
+            <Route path="/hpanel/products/:productId" element={<EditProduct />} />
           </>
         )}
       </Routes>

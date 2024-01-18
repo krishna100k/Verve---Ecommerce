@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import url from "../url";
 import { CircularProgress } from "@mui/material";
-import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+
 import { useNavigate } from "react-router";
 
 interface Products {
@@ -53,6 +53,31 @@ const Main = styled.div<ContainerProps>`
   &::-webkit-scrollbar-thumb {
     background-color: transparent; /* Chrome, Safari, Opera */
   }
+
+  @media (max-width: 1636px) {
+  margin-left: ${(props) => (props.sideBar ? "22vw" : "0px")};
+  }
+
+  @media (max-width: 1432px) {
+  margin-left: ${(props) => (props.sideBar ? "25vw" : "0px")};
+  }
+
+  @media (max-width: 1244px) {
+  margin-left: ${(props) => (props.sideBar ? "30vw" : "0px")};
+  }
+
+  @media (max-width: 1044px) {
+  margin-left: ${(props) => (props.sideBar ? "35vw" : "0px")};
+  }
+
+  @media (max-width: 884px) {
+  margin-left: ${(props) => (props.sideBar ? "46vw" : "0px")};
+  }
+
+  @media (max-width: 670px) {
+  margin-left: 0px;
+  }
+
 `;
 
 const Header = styled.p`
@@ -82,6 +107,7 @@ const Section = styled.div`
   /* padding: 1rem; */
   /* border: solid 1px; */
   margin: .5rem;
+  gap: 1rem;
 `;
 
 const DataLine = styled.div`
@@ -100,9 +126,18 @@ const Image = styled.img`
     width: 20%;
 `
 
+const Buttons = styled.button`
+  border: none;
+  background-color: teal;
+  padding: .5rem;
+  color: white;
+  border-radius: 5px;
+`
+
 const AdminProducts = () => {
   const [sideBar, setSideBar] = useState<boolean>(true);
   const [products, setProducts] = useState<Products[] | null>(null);
+  const [stateHandler, setStateHandler] = useState(false);
 
   const navigate = useNavigate();
 
@@ -118,13 +153,30 @@ const AdminProducts = () => {
     };
 
     fetch();
-  }, []);
+  }, [stateHandler]);
+
+  const handleDelete = async (id: string) => {
+
+    const token = localStorage.getItem(`token`)
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    try{
+      const response = await axios.delete(`${url}/product/delete/${id}`, {headers})
+      console.log(response);
+      setStateHandler(!stateHandler);
+      alert("Product Deleted Successfully")
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   return (
     <Container>
       <AdminNavbar setSideBar={setSideBar} sideBar={sideBar} />
       <Wrapper>
-        <AdminSidebar sideBar={sideBar} />
+        <AdminSidebar sideBar={sideBar} setSideBar={setSideBar} />
         <Main sideBar={sideBar}>
           <Header>Products</Header>
           <HeadingLine>
@@ -141,16 +193,17 @@ const AdminProducts = () => {
               return (
                 <DataLine>
                   <Section>{order.createdAt}</Section>
-                  <Section><Image src={order.img} /></Section>
+                  <Section><Image src={`${url}/uploads/${order.img}`} /></Section>
                   <Section>{order.title}</Section>
                   <Section>{order.desc}</Section>
                   <Section>{order.price}</Section>
                   <Section>{`${order.inStock}`}</Section>
 
                   <Section
-                    onClick={() => navigate(`/hpanel/products/${order._id}`)}
                   >
-                    <ArrowRightAltIcon style={{ cursor: "pointer" }} />
+                    <Buttons style={{ cursor: "pointer" }} onClick={() => navigate(`/hpanel/products/${order._id}`)} >Edit</Buttons>
+                    <Buttons style={{ cursor: "pointer" }} onClick={() => handleDelete(order._id)} >Delete</Buttons>
+
                   </Section>
                 </DataLine>
               );

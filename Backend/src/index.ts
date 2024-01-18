@@ -10,6 +10,8 @@ import orderRoute from "./routes/order";
 import stripeRoute from "./routes/stripe";
 import wishlistRoute from "./routes/Wishlist"
 import razorRoute from "./routes/razor"
+import path from "path";
+
 
 const app: any = express();
 const port: number = 3000;
@@ -35,7 +37,11 @@ connectToMongoose();
 app.use(cors({
   origin: '*'
 }));
-app.use(express.json());
+
+const uploadsPath = path.join(__dirname, './uploads');
+app.use('/uploads', express.static(uploadsPath));
+
+app.use(express.json({limit:'10mb'}));
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/product", productRoute);
@@ -43,7 +49,8 @@ app.use("/cart", cartRoute);
 app.use("/orders", orderRoute);
 app.use("/stripe", stripeRoute);
 app.use("/wish", wishlistRoute );
-app.use("/razor", razorRoute )
+app.use("/razor", razorRoute );
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript with Express!");

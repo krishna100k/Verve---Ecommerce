@@ -7,6 +7,7 @@ import url from "../url";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import { CircularProgress } from "@mui/material";
 
 
 
@@ -216,13 +217,19 @@ const Products: React.FC<ProductsProps> = ({
     }
   };
 
+
   return (
+
     <Container>
+      {products.length === 0 && <CircularProgress />}
       {home
         ? filteredProducts.slice(0, 8).map((product: Product) => {
+
+          const imagePath = `${url}/uploads/${product.img}`
+
             return (
               <Boxes key={product._id}>
-                <Image src={product.img} />
+                <Image src={ imagePath} />
                 <Modal>
                   <Icon>
                     <ShoppingCartOutlinedIcon
@@ -252,10 +259,12 @@ const Products: React.FC<ProductsProps> = ({
             );
           })
         : filteredProducts.map((product: Product) => {
+
+          const imagePath = `${url}/uploads/${product.img}`
             return (
               <Boxes key={product._id}>
-                <Image src={product.img} />
-                <Title>{product.title}</Title>
+                <Image src={imagePath} />
+                <Title>{product.title || product.img}</Title>
                 <Modal>
                   <Icon>
                     <ShoppingCartOutlinedIcon />

@@ -158,11 +158,6 @@ const ProductPrice = styled.div`
   font-weight: 200;
 `;
 
-// const Hr = styled.hr`
-//   background-color: #eee;
-//   border: none;
-//   height: 1px;
-// `;
 
 const Summary = styled.div`
   flex: 1;
@@ -359,7 +354,7 @@ const Cart: React.FC = () => {
       <Wrapper>
         <Title>YOUR CART</Title>
         <Top>
-          <TopButton onClick={() => window.history.back()}>
+          <TopButton onClick={() => navigate("/")}>
             CONTINUE SHOPPING
           </TopButton>
           <TopTexts>
@@ -378,7 +373,7 @@ const Cart: React.FC = () => {
                   <ProductDetail
                     onClick={() => navigate(`/product/${item._id}`)}
                   >
-                    <Image src={item.img} />
+                    <Image src={`${url}/uploads/${item.img}`} />
                     <Details>
                       <ProductName>
                         <b>Product:</b> {item.title}

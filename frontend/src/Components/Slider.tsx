@@ -5,6 +5,9 @@ import { useState } from "react";
 import { sliderItems } from "../data";
 
 import {mobile} from "../responsive"
+import { useNavigate } from "react-router";
+
+
 
 interface ArrowProps {
   direction?: string;
@@ -106,6 +109,7 @@ const Button = styled.button`
   }
 `;
 
+
 const Slider = () => {
   const [slider, setSlider] = useState(0);
 
@@ -116,6 +120,8 @@ const Slider = () => {
       setSlider(slider < 2 ? slider + 1 : 0);
     }
   };
+
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -133,7 +139,7 @@ const Slider = () => {
                 <InfoContainer>
                   <Title>{item.title}</Title>
                   <Para>{item.desc}</Para>
-                  <Button>SHOW NOW</Button>
+                  <Button onClick={() => navigate("/products/all")}>SHOW NOW</Button>
                 </InfoContainer>
               </Slide>
             </>

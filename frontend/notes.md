@@ -5,3 +5,4 @@
 5 - Wishlist - Done
 6 - Search Bar
 7 - Payment Integration - Done
+8 - Encoding and Storing Product Images To Database - Done
