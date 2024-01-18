@@ -38,8 +38,9 @@ app.use(cors({
   origin: '*'
 }));
 
-const uploadsPath = path.join(__dirname, './uploads');
+const uploadsPath = path.join(__dirname, '../uploads');
 app.use('/uploads', express.static(uploadsPath));
+
 
 app.use(express.json({limit:'10mb'}));
 app.use("/user", userRoute);
@@ -52,7 +53,7 @@ app.use("/wish", wishlistRoute );
 app.use("/razor", razorRoute );
 
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/home", (req: Request, res: Response) => {
   res.send("Hello, TypeScript with Express!");
 });
 
