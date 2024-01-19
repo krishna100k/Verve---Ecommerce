@@ -7,7 +7,6 @@ import authRoute from "./routes/auth";
 import productRoute from "./routes/products";
 import cartRoute from "./routes/cart";
 import orderRoute from "./routes/order";
-import stripeRoute from "./routes/stripe";
 import wishlistRoute from "./routes/Wishlist"
 import razorRoute from "./routes/razor"
 import path from "path";
@@ -48,7 +47,6 @@ app.use("/auth", authRoute);
 app.use("/product", productRoute);
 app.use("/cart", cartRoute);
 app.use("/orders", orderRoute);
-app.use("/stripe", stripeRoute);
 app.use("/wish", wishlistRoute );
 app.use("/razor", razorRoute );
 

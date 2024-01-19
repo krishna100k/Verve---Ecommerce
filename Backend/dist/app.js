@@ -21,7 +21,6 @@ const auth_1 = __importDefault(require("./routes/auth"));
 const products_1 = __importDefault(require("./routes/products"));
 const cart_1 = __importDefault(require("./routes/cart"));
 const order_1 = __importDefault(require("./routes/order"));
-const stripe_1 = __importDefault(require("./routes/stripe"));
 const Wishlist_1 = __importDefault(require("./routes/Wishlist"));
 const razor_1 = __importDefault(require("./routes/razor"));
 const path_1 = __importDefault(require("path"));
@@ -53,7 +52,6 @@ app.use("/auth", auth_1.default);
 app.use("/product", products_1.default);
 app.use("/cart", cart_1.default);
 app.use("/orders", order_1.default);
-app.use("/stripe", stripe_1.default);
 app.use("/wish", Wishlist_1.default);
 app.use("/razor", razor_1.default);
 app.get("/home", (req, res) => {

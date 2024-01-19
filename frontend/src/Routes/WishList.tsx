@@ -256,7 +256,7 @@ const WishList: React.FC = () => {
                 return (
                   <Product key={item.productId}>
                     <ProductDetail onClick={() => navigate(`/product/${item.productId}`)}>
-                      <Image src={item.productImg} />
+                      <Image src={`${url}/uploads/${item.productImg}`} />
                       <Details>
                         <ProductName>
                           <b>Product:</b> {item.productTitle}
