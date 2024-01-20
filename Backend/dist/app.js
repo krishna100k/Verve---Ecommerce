@@ -24,8 +24,11 @@ const order_1 = __importDefault(require("./routes/order"));
 const Wishlist_1 = __importDefault(require("./routes/Wishlist"));
 const razor_1 = __importDefault(require("./routes/razor"));
 const path_1 = __importDefault(require("path"));
+const body_parser_1 = __importDefault(require("body-parser"));
 const app = (0, express_1.default)();
 const port = 3000;
+app.use(express_1.default.json());
+app.use(body_parser_1.default.urlencoded({ extended: true }));
 // MongoDB connection
 const connectToMongoose = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -46,7 +49,6 @@ app.use((0, cors_1.default)({
 }));
 const uploadsPath = path_1.default.join(__dirname, '../uploads');
 app.use('/uploads', express_1.default.static(uploadsPath));
-app.use(express_1.default.json({ limit: '10mb' }));
 app.use("/user", user_1.default);
 app.use("/auth", auth_1.default);
 app.use("/product", products_1.default);

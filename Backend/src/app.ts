@@ -10,10 +10,14 @@ import orderRoute from "./routes/order";
 import wishlistRoute from "./routes/Wishlist"
 import razorRoute from "./routes/razor"
 import path from "path";
+import bodyParser from "body-parser";
 
 
 const app: any = express();
 const port: number = 3000;
+
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // MongoDB connection
 const connectToMongoose = async () => {
@@ -41,7 +45,7 @@ const uploadsPath = path.join(__dirname, '../uploads');
 app.use('/uploads', express.static(uploadsPath));
 
 
-app.use(express.json({limit:'10mb'}));
+
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/product", productRoute);
