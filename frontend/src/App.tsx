@@ -15,9 +15,27 @@ import OrderProducts from "./Routes/OrderProducts";
 import AdminProducts from "./Routes/AdminProducts";
 import AddProduct from "./Routes/AddProduct";
 import EditProduct from "./Routes/EditProduct";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import url from "./url";
+import Loading from "./Components/Loading";
 
 function App() {
 
+  const [started, setStarted] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchInitial = async () => {
+      try{
+        const response = await axios.get(`${url}/home`);
+        setStarted(response.data)
+      }catch(err){
+        console.log(err);
+      }
+    }
+
+    fetchInitial();
+  }, [])
 
     InitialInvoke();
 
@@ -31,6 +49,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {!started && <Route path="/" element={<Loading />} />}
+
         <Route path="/" element={<Home />} />
         <Route path="/products/:category" element={<ProductList />} />
         <Route path="/product/:id" element={<Product />} />
