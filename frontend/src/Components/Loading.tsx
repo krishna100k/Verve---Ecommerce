@@ -25,7 +25,7 @@ const Loading = () => {
         <Navbar />
         <Wrapper>
         <h1>Please Wait While the App is Loading</h1>
-        <p>This is happening because the app is hosted for free and the initial request is slow.</p>
+        <p style={{textAlign: "center"}}>This is happening because the app is hosted for free and the initial request is slow. <br/>This process can take upto 40 seconds</p>
         <CircularProgress />
         </Wrapper>
         <NewsLetter />
