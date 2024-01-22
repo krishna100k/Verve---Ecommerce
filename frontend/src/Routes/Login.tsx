@@ -7,13 +7,7 @@ import { useDispatch } from "react-redux";
 import { loginFailure, loginRequest, loginSuccess } from "../redux/userSlice";
 import { useNavigate } from "react-router";
 import Navbar from "../Components/Navbar";
-// import { changeHandler } from "../redux/cartSlice";
-// import { useSelector } from "react-redux";
-// import { State } from "../redux/cartSlice";
 
-// interface Change{
-//   cart: State
-// }
 
 const Container = styled.div`
   width: 100vw;
@@ -139,6 +133,7 @@ const Login = () => {
             placeholder="username"
           />
           <Input
+          type="password"
           value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="password"
