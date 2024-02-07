@@ -29,7 +29,7 @@ const Center = styled.div`
   gap: 1.7rem;
   flex: 1;
   width: auto;
-  padding: 2rem;
+  padding: 2rem 0rem 2rem 2rem;
 `;
 const Right = styled.div`
   flex: 1;
@@ -75,8 +75,8 @@ const List = styled.ul`
   display: flex;
   gap: 1rem;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: space-between;
   flex-wrap: wrap;
   height: 10rem;
 `;
@@ -137,7 +137,6 @@ const Footer = () => {
         <List>
           <ListItem>Home</ListItem>
           <ListItem>Mens Fashion</ListItem>
-          <ListItem>Accessories</ListItem>
           <ListItem>Order Tracking</ListItem>
           <ListItem>WishList</ListItem>
           <ListItem>Cart</ListItem>

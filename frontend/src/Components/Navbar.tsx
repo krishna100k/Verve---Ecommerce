@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${mobile({ padding: "10px 25px 0px 10px" })}
+  ${mobile({ padding: "10px 25px 0px 10px", gap: '5px' })}
 `;
 
 const Left = styled.div`
@@ -69,7 +69,7 @@ const SearchBar = styled.div`
   align-items: center;
   border: solid 1px lightgray;
   justify-content: space-between;
-  ${mobile({ width: "100%" })}
+  ${mobile({ width: "100%", display: 'none' })}
 `;
 
 const Input = styled.input`
